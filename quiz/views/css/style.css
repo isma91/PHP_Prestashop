@@ -1,0 +1,72 @@
+@font-face {
+	font-family: 'Pacifico';
+	font-style: normal;
+	src: url('../font/Pacifico.ttf');
+}
+@font-face {
+	font-family: 'Abel-Regular';
+	font-style: normal;
+	src: url('../font/Abel-Regular.ttf');
+}
+#div_title h1,
+#div_title h2 {
+	text-align: center;
+	margin: auto;
+	font-family: 'Pacifico', cursive;
+	font-size: 2em;
+	margin-bottom: 10px;
+}
+#create_quiz {
+	margin: auto;
+	text-align: center;
+}
+#create_quiz_button:hover,
+#quiz_name_button:hover {
+	background-color: #AEAEAE;
+}
+.error {
+	color: red;
+	font-size: 1.5em;
+}
+.info {
+	color: #31708f;
+	font-size: 1.5em;
+	text-align: center;
+}
+#absolute_center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+#module_path,
+#id_quiz {
+	display: none;
+	visibility: hidden;
+}
+.list_quiz,
+#quiz_name_form,
+#list_question,
+#div_button_quiz,
+#list_radio {
+	width: 50%;
+	text-align: center;
+	margin: auto;
+}
+.modify,
+.delete,
+.go {
+	width: 10%;
+	cursor: pointer;
+}
+.modify:hover,
+.delete:hover,
+.go:hover {
+	background-color: #AEAEAE;
+}
+.list_quiz_name {
+	font-size: 1.5em;
+}
+.list_quiz_img {
+	float: right;
+}
