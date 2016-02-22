@@ -47,10 +47,14 @@ class Quiz extends Module
 	}
 	public function install()
 	{
-		if (parent::install() && $this->registerHook('displayBackOfficeHeader')){
+		if (parent::install() && $this->registerHook('displayBackOfficeHeader') && $this->registerHook('displayTop')){
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `quiz_name` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_question` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `question` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_response` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `response` TEXT NOT NULL,`id_question` INT(11) NOT NULL) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_response` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `response` TEXT NOT NULL, `id_question` INT(11) NOT NULL, `score` INT(11) NOT NULL DEFAULT "0") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_list_score_product` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_list_product` TEXT NOT NULL, `score_between` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_activate` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_history` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_user` INT(11) NOT NULL, `list_response` TEXT NOT NULL, `score` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'quiz_activate`(`id`, `id_quiz`) VALUES (1,0)');
 			return true;
 		}
 		return false;
@@ -61,6 +65,8 @@ class Quiz extends Module
 			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz`');
 			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_question`');
 			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_response`');
+			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_list_score_product`');
+			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_activate`');
 			$this->unregisterHook('displayBackOfficeHeader');
 			return true;
 		}
@@ -68,7 +74,6 @@ class Quiz extends Module
 	}
 	public function getContent()
 	{
-		//$html = $html . '<script src="' . $this->_path . 'views/js/jquery-2.1.4.min.js" type="text/javascript" ></script>';
 		$html = '';
 		$html = $html . '<link href="' . $this->_path . 'views/css/style.css" rel="stylesheet" type="text/css" media="all" />';
 		$html = $html . '<script src="' . $this->_path . 'views/js/admin.js" type="text/javascript" ></script>';
@@ -76,8 +81,20 @@ class Quiz extends Module
 		$html = $html . '<div class="jumbotron" id="div_title">';
 		$html = $html . '<h1>Welcome to Quiz module !!</h1>';
 		$html = $html . '<h2>Create a survey for you customers to display the better products !!</h2></div>';
-		$html = $html . '<p id="module_path">' . $this->_path . '</p>';
+		$html = $html . '<p id="module_path">' . $this->_path . '</p><p id="id_language">' . $this->context->language->id . '</p>';
 		$html = $html . '</div>';
 		return $html;
 	}
+	public function hookDisplayTop ($param)
+	{
+		return 'AZERTYUIOP';
+	}
+	/*
+	displayHeader	Called within the HTML <head> tags. Ideal location for adding JavaScript and CSS files.
+	displayTop	Called in the page's header.
+	displayLeftColumn	Called when loading the left column.
+	displayRightColumn	Called when loading the right column.
+	displayFooter	Called in the page's footer.
+	displayHome	Called at the center of the homepage.
+	*/
 }
