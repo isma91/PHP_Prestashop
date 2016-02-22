@@ -114,9 +114,9 @@ $(document).ready(function () {
 						}, function () {
 							$(this).css('background-color', '#FFFFFF');
 						});
-					$('#list_question').append('<p id="id_quiz">' + data.data + '</p>')
+					$('#list_question').append('<p id="id_quiz">' + data.data + '</p>');
 				} else {
-					$('#quiz_name_error').html('<p class="error">' + data.error + '</p>')
+					$('#quiz_name_error').html('<p class="error">' + data.error + '</p>');
 				}
 			}
 		});
@@ -165,9 +165,16 @@ $(document).ready(function () {
 			if (textStatus === "success") {
 				data = JSON.parse(data);
 				if (data.error === null) {
-					$('#the_body').html('<div id="div_title"><h1>Choose your listing product type</h1></div><div id="list_radio"><div class="radio"><label><input type="radio" name="radio_list_product">List the products against a predefined score</label></div><div class="radio"><label><input type="radio" name="radio_list_product">Add a list </label></div></div>');
+					$('#the_body').html('<div id="div_title"><h1>Choose your listing product type</h1></div><div id="list_radio"><div class="radio"><label><input type="radio" value="list_product_score" name="radio_list_product">List the products against a predefined score (eg between 0 and 50: list Product 1, from 50 to 68: Product List 7 etc ...)</label></div><div class="radio"><label><input type="radio" value="list_product_response" name="radio_list_product">List products following responses (eg if response a Question 1: 4 product list add to the list, if response d question 2: 1 Product list add to the list etc ...)</label><button id="product_list_go" class="btn btn-default">Go to the product list</button></div><p id="id_quiz">' + data.data + '</p></div>');
 				}
 			}
 		});
+	});
+	$(document.body).on('click', '#product_list_go', function () {
+		if ($('input[name="radio_list_product"]:checked').val() === "list_product_score") {
+			//score
+		} else {
+			//by response
+		}
 	});
 });
