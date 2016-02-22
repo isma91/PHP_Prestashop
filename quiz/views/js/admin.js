@@ -2,11 +2,14 @@
 /*jslint devel : true*/
 /*global $, document, this*/
 $(document).ready(function () {
-	var module_path, list_quiz, quiz_name_number_question, i, list_question, j, list_number_question, quiz_question_number, list_number_response, k, list_response, empty_field, arrary_validate_quizz, obj_quiz, response_id, question_id;
+	var module_path, id_language, list_quiz, quiz_name_number_question, i, list_question, j, list_number_question, quiz_question_number, list_number_response, k, list_response, empty_field, arrary_validate_quizz, obj_quiz, response_id, question_id, list_image, l, question_list, response_list, list_select_product, m, list_different_score, list_id_product, array_list_id_product, obj_end_quiz;
+	array_list_id_product = [];
 	obj_quiz = {};
+	obj_end_quiz = {};
 	arrary_validate_quizz = [];
 	empty_field = "false";
 	module_path = $('#module_path').text();
+	id_language = $('#id_language').text();
 	function check_duplicate_quiz_name (quiz_name, button_selector, error_selector) {
 		"use strict";
 		$.post(module_path + 'ajax_quiz.php', {action: 'check_duplicate_quiz_name', quiz_name: quiz_name}, function (data, textStatus) {
@@ -165,16 +168,86 @@ $(document).ready(function () {
 			if (textStatus === "success") {
 				data = JSON.parse(data);
 				if (data.error === null) {
-					$('#the_body').html('<div id="div_title"><h1>Choose your listing product type</h1></div><div id="list_radio"><div class="radio"><label><input type="radio" value="list_product_score" name="radio_list_product">List the products against a predefined score (eg between 0 and 50: list Product 1, from 50 to 68: Product List 7 etc ...)</label></div><div class="radio"><label><input type="radio" value="list_product_response" name="radio_list_product">List products following responses (eg if response a Question 1: 4 product list add to the list, if response d question 2: 1 Product list add to the list etc ...)</label><button id="product_list_go" class="btn btn-default">Go to the product list</button></div><p id="id_quiz">' + data.data + '</p></div>');
+					$('#the_body').html('<div id="div_title"><h1>Choose your product list</h1></div><div id="list_question_response_score_product"><button id="product_list_go" class="btn btn-default">Go to the product list</button></div><p id="id_quiz">' + data.data + '</p><p id="list_id_product"></p><div id="div_validate_end_quiz"></div>');
 				}
 			}
 		});
 	});
 	$(document.body).on('click', '#product_list_go', function () {
-		if ($('input[name="radio_list_product"]:checked').val() === "list_product_score") {
-			//score
-		} else {
-			//by response
-		}
+		$.post(module_path + 'ajax_quiz.php', {action: 'get_quiz', id_quiz: $('#id_quiz').text()}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				if (data.error === null) {
+					question_list = '';
+					$.each(data.data.question, function (id_question, question) {
+						question_list = question_list + '<div id="list_question_' + id_question + '"><p><span class="question">Question : </span><span id="question_' + id_question + '">' + question + '</span></p><div id="list_response_' + id_question + '"></div></div>';
+					});
+					$('#list_question_response_score_product').html(question_list);
+					$.each(data.data.response, function (id_question, json_response) {
+						response_list = '';
+						$.each(json_response, function (id_response, response) {
+							response_list = response_list + '<div class="form-inline"><div class="form-group"><label for="score_response_' + id_response + '">' + response + '</label><select class="form-control score_response_select" id="score_response_' + id_response + '"><option value="0">0</option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select></div></div>';
+						});
+						$('#list_response_' + id_question).html(response_list);
+					});
+				}
+			}
+		});
+		$.post(module_path + 'ajax_quiz.php', {action: 'get_all_products', id_quiz: $('#id_quiz').text(), id_language: id_language}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				if (data.error === null) {
+					list_image = '<div class="container" id="list_image">';
+					list_id_product = '';
+					$.each(data.data, function (id_product, img_path) {
+						list_image = list_image + '<div class="list_image_product"><p>id of the product : ' + id_product + '</p><img src="http://' + img_path + '" alt="product number ' + id_product + '" class="img-circle img-thumbnail" id="' + id_product + '" /></div>';
+						list_id_product = list_id_product + id_product + '|';
+					});
+					list_image + list_image + '</div>';
+					$('#list_id_product').html(list_id_product);
+					$('#list_question_response_score_product').append(list_image);
+					$('#list_question_response_score_product').append('<label for="number_different_score">Choose the number of different score and therefore product list that you want to display</label><select class="form-group" id="number_different_score"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select><button id="button_display_different_score" class="btn btn-default">Display different score</button><div id="list_different_score"></div>');
+				}
+			}
+		});
 	});
-});
+	$(document.body).on('click', '#button_display_different_score', function () {
+		number_different_score = $("#number_different_score option:selected").val();
+		number_different_score++;
+		list_different_score = '';
+		id_product_option = '';
+		array_list_id_product = $('#list_id_product').text().split('|');
+		for (n = 0; n < array_list_id_product.length; n = n + 1) {
+			if (array_list_id_product[n] !== "" && $.isNumeric(array_list_id_product[n]) !== false) {
+				id_product_option = id_product_option + '<option value="' + array_list_id_product[n] + '">' + array_list_id_product[n] + '</option>';
+			}
+		}
+		for (m = 1; m < number_different_score; m = m + 1) {
+			list_select_product = '<label for="select_different_score_' + m + '">Choose your product list (Hold CTRL to select multiple product)</label><select multiple="true" class="form-control select_different_score" id="select_different_score_' + m + '">' + id_product_option + '</select>';
+			list_different_score = list_different_score + '<div id="div_different_score_' + m + '" class="form-inline">Between <div class="form-group"><input type="number" id="input_1_score_' + m + '" class="form-control score_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57"></div> and <div class="form-group"><input type="number" id="input_2_score_' + m + '" class="form-control score_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57"></div>' + list_select_product + '</div>';
+		}
+		$('#list_different_score').html(list_different_score);
+		$('#div_validate_end_quiz').html('<button id="validate_end_quiz" class="btn btn-default">Complete the quiz</button>');
+	});
+	$(document.body).on('click', '#validate_end_quiz', function () {
+		obj_end_quiz = {};
+		$.each($('.select_different_score'), function (index, input) {
+			obj_end_quiz[$(input).attr('id')] = $.trim($(input).val()).split(",");
+		});
+		$.each($('.score_input'), function (index, input) {
+			obj_end_quiz[$(input).attr('id')] = $.trim($(input).val()).split(",");
+		});
+		$.each($('.score_response_select'), function (index, input) {
+			obj_end_quiz[$(input).attr('id')] = $.trim($(input).val()).split(",");
+		});
+		$.post(module_path + 'ajax_quiz.php', {action: 'create_end_quiz', quiz: obj_end_quiz, id_quiz: $('#id_quiz').text()}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				console.log(data);
+				if (data.error === null) {
+					$('#the_body').html('<div class="container" id="div_final">Your quiz have been created !! You can quit the quiz config now !!</div>');
+				}
+			}
+		});
+	});
+});    
