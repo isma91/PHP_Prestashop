@@ -63,54 +63,14 @@
 		{/if}
 		<!-- left infos-->
 		<div class="pb-left-column col-xs-12 col-sm-4 col-md-5">
-			<!-- product img-->
-			<div id="image-block" class="clearfix">
-				{if $product->new}
-					<span class="new-box">
-						<span class="new-label">{l s='New'}</span>
-					</span>
-				{/if}
-				{if $product->on_sale}
-					<span class="sale-box no-print">
-						<span class="sale-label">{l s='Sale!'}</span>
-					</span>
-				{elseif $product->specificPrice && $product->specificPrice.reduction && $productPriceWithoutReduction > $productPrice}
-					<span class="discount">{l s='Reduced price!'}</span>
-				{/if}
-				{if $have_image}
-					<span id="view_full_size">
-						{if $jqZoomEnabled && $have_image && !$content_only}
-							<a class="jqzoom" title="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" rel="gal1" href="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox_default')|escape:'html':'UTF-8'}">
-								<img itemprop="image" src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large_default')|escape:'html':'UTF-8'}" title="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" alt="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}"/>
-							</a>
-						{else}
-							<img id="bigpic" itemprop="image" src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large_default')|escape:'html':'UTF-8'}" title="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" alt="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" width="{$largeSize.width}" height="{$largeSize.height}"/>
-							{if !$content_only}
-								<span class="span_link no-print">{l s='View larger'}</span>
-							{/if}
-						{/if}
-					</span>
-				{else}
-					<span id="view_full_size">
-						<img itemprop="image" src="{$img_prod_dir}{$lang_iso}-default-large_default.jpg" id="bigpic" alt="" title="{$product->name|escape:'html':'UTF-8'}" width="{$largeSize.width}" height="{$largeSize.height}"/>
-						{if !$content_only}
-							<span class="span_link">
-								{l s='View larger'}
-							</span>
-						{/if}
-					</span>
-				{/if}
-			</div> <!-- end image-block -->
+		</div> <!-- end pb-left-column -->
+		<!-- end left infos-->
+		<!-- center infos -->
+		<div class="product col-xs-12 col-sm-4">
 			{if isset($images) && count($images) > 0}
 				<!-- thumbnails -->
 				<div id="views_block" class="clearfix {if isset($images) && count($images) < 2}hidden{/if}">
-					{if isset($images) && count($images) > 2}
-						<span class="view_scroll_spacer">
-							<a id="view_scroll_left" class="" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">
-								{l s='Previous'}
-							</a>
-						</span>
-					{/if}
+
 					<div id="thumbs_list">
 						<ul id="thumbs_list_frame">
 						{if isset($images)}
@@ -130,14 +90,47 @@
 						{/if}
 						</ul>
 					</div> <!-- end thumbs_list -->
-					{if isset($images) && count($images) > 2}
-						<a id="view_scroll_right" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">
-							{l s='Next'}
-						</a>
-					{/if}
+
 				</div> <!-- end views-block -->
 				<!-- end thumbnails -->
 			{/if}
+			{if !$product->is_virtual && $product->condition}
+			<!-- product img-->
+			<div id="image-block">
+				<!-- {if $product->new}
+					<span class="new-box">
+						<span class="new-label">{l s='New'}</span>
+					</span>
+				{/if}
+				{if $product->on_sale}
+					<span class="sale-box no-print">
+						<span class="sale-label">{l s='Sale!'}</span>
+					</span>
+				{elseif $product->specificPrice && $product->specificPrice.reduction && $productPriceWithoutReduction > $productPrice}
+					<span class="discount">{l s='Reduced price!'}</span>
+				{/if} -->
+				{if $have_image}
+					<span id="view_full_size">
+						{if $jqZoomEnabled && $have_image && !$content_only}
+							<a class="jqzoom" title="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" rel="gal1" href="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox_default')|escape:'html':'UTF-8'}">
+								<img itemprop="image" src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large_default')|escape:'html':'UTF-8'}" title="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" alt="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}"/>
+							</a>
+						{else}
+							<img id="bigpic" itemprop="image" src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large_default')|escape:'html':'UTF-8'}" title="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" alt="{if !empty($cover.legend)}{$cover.legend|escape:'html':'UTF-8'}{else}{$product->name|escape:'html':'UTF-8'}{/if}" width="{$largeSize.width}" height="{$largeSize.height}"/>
+
+						{/if}
+					</span>
+				{else}
+					<span id="view_full_size">
+						<img itemprop="image" src="{$img_prod_dir}{$lang_iso}-default-large_default.jpg" id="bigpic" alt="" title="{$product->name|escape:'html':'UTF-8'}" width="{$largeSize.width}" height="{$largeSize.height}"/>
+						{if !$content_only}
+							<span class="span_link">
+								{l s='View larger'}
+							</span>
+						{/if}
+					</span>
+				{/if}
+			</div> <!-- end image-block -->
 			{if isset($images) && count($images) > 1}
 				<p class="resetimg clear no-print">
 					<span id="wrapResetImages" style="display: none;">
@@ -148,19 +141,6 @@
 					</span>
 				</p>
 			{/if}
-		</div> <!-- end pb-left-column -->
-		<!-- end left infos-->
-		<!-- center infos -->
-		<div class="pb-center-column col-xs-12 col-sm-4">
-			{if $product->online_only}
-				<p class="online_only">{l s='Online only'}</p>
-			{/if}
-			<h1 itemprop="name">{$product->name|escape:'html':'UTF-8'}</h1>
-			<p id="product_reference"{if empty($product->reference) || !$product->reference} style="display: none;"{/if}>
-				<label>{l s='Reference:'} </label>
-				<span class="editable" itemprop="sku"{if !empty($product->reference) && $product->reference} content="{$product->reference}"{/if}>{if !isset($groups)}{$product->reference|escape:'html':'UTF-8'}{/if}</span>
-			</p>
-			{if !$product->is_virtual && $product->condition}
 			<p id="product_condition">
 				<label>{l s='Condition:'} </label>
 				{if $product->condition == 'new'}
@@ -175,6 +155,14 @@
 				{/if}
 			</p>
 			{/if}
+			{if $product->online_only}
+				<p class="online_only">{l s='Online only'}</p>
+			{/if}
+			<h1 itemprop="name">{$product->name|escape:'html':'UTF-8'}</h1>
+			<p id="product_reference"{if empty($product->reference) || !$product->reference} style="display: none;"{/if}>
+				<label>{l s='Reference:'} </label>
+				<span class="editable" itemprop="sku"{if !empty($product->reference) && $product->reference} content="{$product->reference}"{/if}>{if !isset($groups)}{$product->reference|escape:'html':'UTF-8'}{/if}</span>
+			</p>
 			{if $product->description_short || $packItems|@count > 0}
 				<div id="short_description_block">
 					{if $product->description_short}
@@ -240,6 +228,7 @@
 				</ul>
 			{/if}
 		</div>
+		
 		<!-- end center infos-->
 		<!-- pb-right-column-->
 		<div class="pb-right-column col-xs-12 col-sm-4 col-md-3">
