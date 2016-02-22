@@ -17,10 +17,8 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2015 PrestaShop SA
+*  @author Raph <bleuze_r@epitech.eu>
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
 *}
 {capture name=path}
 	{if !isset($email_create)}{l s='Authentication'}{else}
@@ -61,7 +59,7 @@
 							<label for="email_create">Adresse e-mail</label>
 							<input type="email" class="is_required validate account_input form-control" data-validate="isEmail" id="email_create" name="email_create" value="{if isset($smarty.post.email_create)}{$smarty.post.email_create|stripslashes}{/if}" />
 						</div>
-						<div class="submit">
+						<p class="submit">
 							{if isset($back)}<input type="hidden" class="hidden" name="back" value="{$back|escape:'html':'UTF-8'}" />{/if}
 							<button class="btn btn-default button button-medium exclusive" type="submit" id="SubmitCreate" name="SubmitCreate">
 								<span>
@@ -69,8 +67,8 @@
 									Créez votre compte
 								</span>
 							</button>
-							<input type="hidden" class="hidden" name="SubmitCreate" value="Créez votre compte" />
-						</div>
+							<!--<input type="hidden" class="hidden" name="SubmitCreate" value="Créez votre compte" />-->
+						</p>
 					</div>
 				</fieldset>
 			</form>
@@ -78,23 +76,23 @@
 		<div class="col-xs-12 col-sm-6">
 			<form action="{$link->getPageLink('authentication', true)|escape:'html':'UTF-8'}" method="post" id="login_form" class="box">
 				<fieldset>
-				<legend><h3 class="page-subheading">{l s='Already registered?'}</h3></legend>
+				<legend><h3 class="page-subheading">Déjà inscrit ?</h3></legend>
 				<div class="form_content clearfix">
 					<div class="form-group">
-						<label for="email">{l s='Email address'}</label>
+						<label for="email">Votre email</label>
 						<input class="is_required validate account_input form-control" data-validate="isEmail" type="email" id="email" name="email" value="{if isset($smarty.post.email)}{$smarty.post.email|stripslashes}{/if}" />
 					</div>
 					<div class="form-group">
-						<label for="passwd">{l s='Password'}</label>
+						<label for="passwd">Votre mot de passe</label>
 						<input class="is_required validate account_input form-control" type="password" data-validate="isPasswd" id="passwd" name="passwd" value="" />
 					</div>
-					<p class="lost_password form-group"><a href="{$link->getPageLink('password')|escape:'html':'UTF-8'}" title="{l s='Recover your forgotten password'}" rel="nofollow">{l s='Forgot your password?'}</a></p>
+					<p class="lost_password form-group"><a href="{$link->getPageLink('password')|escape:'html':'UTF-8'}" title="{l s='Recover your forgotten password'}" rel="nofollow">Mot de passe oublié ?</a></p>
 					<p class="submit">
 						{if isset($back)}<input type="hidden" class="hidden" name="back" value="{$back|escape:'html':'UTF-8'}" />{/if}
 						<button type="submit" id="SubmitLogin" name="SubmitLogin" class="button btn btn-default button-medium">
 							<span>
 								<i class="icon-lock left"></i>
-								{l s='Sign in'}
+								Connexion
 							</span>
 						</button>
 					</p>

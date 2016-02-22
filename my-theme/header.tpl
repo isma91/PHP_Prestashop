@@ -17,10 +17,8 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2015 PrestaShop SA
+*  @author Raph <bleuze_r@epitech.eu>
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
 *}
 <!DOCTYPE HTML>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"{if isset($language_code) && $language_code} lang="{$language_code|escape:'html':'UTF-8'}"{/if}><![endif]-->
@@ -71,26 +69,12 @@
 		<div id="page">
 			<div class="header-container">
 				<header id="header">
-					{capture name='displayBanner'}{hook h='displayBanner'}{/capture}
-					{if $smarty.capture.displayBanner}
-						<div class="banner">
-							<div class="container">
-								<div class="row">
+
 									{$smarty.capture.displayBanner}
-								</div>
-							</div>
-						</div>
-					{/if}
-					{capture name='displayNav'}{hook h='displayNav'}{/capture}
-					{if $smarty.capture.displayNav}
-						<div class="nav">
-							<div class="container">
-								<div class="row">
-									<nav>{$smarty.capture.displayNav}</nav>
-								</div>
-							</div>
-						</div>
-					{/if}
+
+
+									{$smarty.capture.displayNav}
+
 					<div>
 						<div class="container">
 							<div class="row">
@@ -99,27 +83,17 @@
 										<img class="logo img-responsive" src="{$logo_url}" alt="{$shop_name|escape:'html':'UTF-8'}"{if isset($logo_image_width) && $logo_image_width} width="{$logo_image_width}"{/if}{if isset($logo_image_height) && $logo_image_height} height="{$logo_image_height}"{/if}/>
 									</a>
 								</div>
-								{if isset($HOOK_TOP)}{$HOOK_TOP}{/if}
+								
 							</div>
 						</div>
 					</div>
+					<div class="log">
+						<p>Login</p>
+					</div>
+					<div class="bar_top">
+						
+					</div>
 				</header>
 			</div>
-			<div class="columns-container">
-				<div id="columns" class="container">
-					{if $page_name !='index' && $page_name !='pagenotfound'}
-						{include file="$tpl_dir./breadcrumb.tpl"}
-					{/if}
-					<div id="slider_row" class="row">
-						{capture name='displayTopColumn'}{hook h='displayTopColumn'}{/capture}
-						{if $smarty.capture.displayTopColumn}
-							<div id="top_column" class="center_column col-xs-12 col-sm-12">{$smarty.capture.displayTopColumn}</div>
-						{/if}
-					</div>
-					<div class="row">
-						{if isset($left_column_size) && !empty($left_column_size)}
-						<div id="left_column" class="column col-xs-12 col-sm-{$left_column_size|intval}">{$HOOK_LEFT_COLUMN}</div>
-						{/if}
-						{if isset($left_column_size) && isset($right_column_size)}{assign var='cols' value=(12 - $left_column_size - $right_column_size)}{else}{assign var='cols' value=12}{/if}
-						<div id="center_column" class="center_column col-xs-12 col-sm-{$cols|intval}">
+			
 	{/if}

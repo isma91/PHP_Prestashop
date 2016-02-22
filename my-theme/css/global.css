@@ -19,3 +19,39 @@ body {
     width: 100%;
     float: left;
 }
+.shop-phone {
+    display: none;
+}
+
+.log p {
+    padding: 20px;
+    float: right;
+    border: 1px solid black;
+
+}
+.bar_top {
+    height: 25px;
+    background-color: #bbb;
+    width: 100%;
+    clear: both;
+}
+#header_logo {
+    float: left;
+}
+
+.tab-content {
+    float: left;
+    width: 60%;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.right-bar {
+    padding: 10px;
+    margin: 15px;
+    float: left;
+    width: 35%;
+    border: 1px solid black;
+}
