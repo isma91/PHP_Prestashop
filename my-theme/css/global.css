@@ -41,7 +41,7 @@ body {
 
 .tab-content {
     float: left;
-    width: 60%;
+    width: 70%;
 }
 
 .clearfix {
@@ -52,6 +52,92 @@ body {
     padding: 10px;
     margin: 15px;
     float: left;
-    width: 35%;
+    width: 25%;
+    border: 1px solid black;
+}
+
+#search_block_top {
+    padding-top: 0 !important;
+}
+#searchbox {
+}
+.search_query {
+    padding: 0 !important;
+    height: 25px;
+    font-size: 24px;
+    float: left;
+    width: 90%;
+}
+.button-search {
+    width: 10% !important;
+    float: left;
+}
+
+.shopping_cart {
+    margin-top: 15px !important;
+    width: 100% !important;
+
+}
+/*.product {
+    width: 70%;
+    float: left;
+}*/
+
+
+/* ---- product ---- */
+#product_u {
+    width: 70%;
+    float: left;
+}
+#views_block {
+    float: left;
+    width: 100px;
+}
+#thumbs_list_frame {
+    padding: 0;
+}
+#thumbs_list {
+    float: left;
+}
+#thumbs_list li {
+    display: block;
+}
+#view_full_size {
+    float: left;
+}
+
+#image-block {
+    float: left;
+    margin-right: 25px;
+}
+
+.test {
+    display: none;
+}
+
+.info_comp {
+    width: 70%;
+    border: 1px solid black;
+}
+
+#order_step {
+    padding-bottom: 20px;
+}
+
+#order_step .step_current {
+    float: left;
+    display: block;
+    width: 150px;
+    background-color: blue;
+    padding: 3px;
+    border: 1px solid black;
+    color: white;
+}
+#order_step .step_todo, #order_step .step_done_last {
+    float: left;
+    display: block;
+    width: 150px;
+    background-color: #eee;
+    padding: 3px;
     border: 1px solid black;
 }
