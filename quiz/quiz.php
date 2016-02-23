@@ -53,7 +53,7 @@ class Quiz extends Module
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_response` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `response` TEXT NOT NULL, `id_question` INT(11) NOT NULL, `score` INT(11) NOT NULL DEFAULT "0") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_list_score_product` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_list_product` TEXT NOT NULL, `score_between` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_activate` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_history` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_user` INT(11) NOT NULL, `list_response` TEXT NOT NULL, `score` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_history` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_user` INT(11) NOT NULL, `list_question_response` TEXT NOT NULL, `score` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
 			Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'quiz_activate`(`id`, `id_quiz`) VALUES (1,0)');
 			return true;
 		}
@@ -68,6 +68,7 @@ class Quiz extends Module
 			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_list_score_product`');
 			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_activate`');
 			$this->unregisterHook('displayBackOfficeHeader');
+			$this->unregisterHook('displayTop');
 			return true;
 		}
 		return false;
@@ -75,7 +76,7 @@ class Quiz extends Module
 	public function getContent()
 	{
 		$html = '';
-		$html = $html . '<link href="' . $this->_path . 'views/css/style.css" rel="stylesheet" type="text/css" media="all" />';
+		$html = $html . '<link href="' . $this->_path . 'views/css/style_admin.css" rel="stylesheet" type="text/css" media="all" />';
 		$html = $html . '<script src="' . $this->_path . 'views/js/admin.js" type="text/javascript" ></script>';
 		$html = $html . '<div class="container" id="the_body">';
 		$html = $html . '<div class="jumbotron" id="div_title">';
@@ -85,9 +86,32 @@ class Quiz extends Module
 		$html = $html . '</div>';
 		return $html;
 	}
+	public function hookDisplayHeader ($param)
+	{
+		$this->context->controller->addCSS($this->_path . 'views/css/style_client.css', 'all');
+		$this->context->controller->addJS($this->_path . 'views/js/materialize.min.js');
+		$this->context->controller->addJS($this->_path . 'views/js/client.js');
+	}
 	public function hookDisplayTop ($param)
 	{
-		return 'AZERTYUIOP';
+		$result_activate_quiz = Db::getInstance()->ExecuteS('SELECT id_quiz FROM `' . _DB_PREFIX_ . 'quiz_activate`');
+		if ($result_activate_quiz) {
+			if (empty($result_activate_quiz[0]["id_quiz"])) {
+				$quiz_activate = false;
+			} else {
+				$quiz_activate = true;
+			}
+		}
+		if ($quiz_activate === true) {
+			$result = Db::getInstance()->ExecuteS('SELECT ' . _DB_PREFIX_ . 'quiz.quiz_name FROM `' . _DB_PREFIX_ . 'quiz_activate` INNER JOIN ' . _DB_PREFIX_ . 'quiz ON ' . _DB_PREFIX_ . 'quiz.id = ' . _DB_PREFIX_ . 'quiz_activate.id_quiz');
+			if (!empty($result)) {
+				$quiz_name = $result[0]["quiz_name"];
+			}
+			$html = '';
+			$html = $html . 'Click here to participate in the survey <button class="btn btn-lg btn-default go_in_quiz" user_id="' . $this->context->customer->id . '" user_lastname="' . $this->context->customer->lastname . '" user_firstname="' . $this->context->customer->firstname . '" module_path="' . $this->_path . '" id="go_in_quiz_id_' . $result_activate_quiz[0]["id_quiz"] . '">' . $quiz_name . '</button>';
+			$html = $html . '<div id="quiz_modal" class="modal modal-fixed-footer"><div class="modal-content" id="quiz_content"><div id="quiz_title"></div><div id="quiz_question_response"></div><div id="quiz_score"></div><p id="id_language">' . $this->context->language->id . '</p></div><div class="modal-footer"><button class="modal-action modal-close btn btn-lg btn-default">Quit</button><button class="btn btn-lg btn-default" id="validate_response" disabled="true">Validate</button></div></div>';
+			return $html;
+		}
 	}
 	/*
 	displayHeader	Called within the HTML <head> tags. Ideal location for adding JavaScript and CSS files.
