@@ -114,3 +114,30 @@ body {
 .test {
     display: none;
 }
+
+.info_comp {
+    width: 70%;
+    border: 1px solid black;
+}
+
+#order_step {
+    padding-bottom: 20px;
+}
+
+#order_step .step_current {
+    float: left;
+    display: block;
+    width: 150px;
+    background-color: blue;
+    padding: 3px;
+    border: 1px solid black;
+    color: white;
+}
+#order_step .step_todo, #order_step .step_done_last {
+    float: left;
+    display: block;
+    width: 150px;
+    background-color: #eee;
+    padding: 3px;
+    border: 1px solid black;
+}
