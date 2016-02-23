@@ -49,7 +49,8 @@
 #list_radio,
 #list_image,
 #list_question_response_score_product,
-#div_validate_end_quiz {
+#div_validate_end_quiz,
+#info {
 	width: 90%;
 	text-align: center;
 	margin: auto;
@@ -89,4 +90,8 @@
 .list_image_product {
 	float: left;
 	width: 35%;
+}
+.success {
+	font-size: 1.5em;
+	color: green;
 }
