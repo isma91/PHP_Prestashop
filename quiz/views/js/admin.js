@@ -58,6 +58,23 @@ $(document).ready(function () {
 			$('#validate_quiz').removeProp('disabled');
 		}
 	}
+	function check_activate_quiz () {
+		$.post(module_path + 'ajax_quiz.php', {action: 'check_activate_quiz'}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				console.log(data);
+				if (data.error === null) {
+					if (data.data !== "empty") {
+						$('.quiz_activate_id').html('');
+						$('#activate_quiz_id_' + data.data).html(' (activate quiz)');
+					} else {
+						$('.quiz_activate_id').html('');
+						$('#info').html('<p class="error">No quiz activated !!</p>');
+					}
+				}
+			}
+	});
+	}
 	$.post(module_path + 'ajax_quiz.php', {action: 'get_all_quiz'}, function (data, textStatus) {
 		if (textStatus === "success") {
 			data = JSON.parse(data);
@@ -66,11 +83,12 @@ $(document).ready(function () {
 					$("#the_body").append('<p class="info">No quiz found !! Click on the button to create one !!</p>');
 					$("#the_body").append('<div id="create_quiz"><button class="btn btn-lg btn-default" id="create_quiz_button">Create a quiz</button></div>');
 				} else {
-					$("#the_body").append('<p class="info">' + data.data.length + ' quiz found !!</p>');
+					$("#the_body").append('<p class="info">Click here to disable quiz !! <button class="btn btn-lg btn-default" id="button_disable_quiz">Disable quiz</button></p>');
+					$("#the_body").append('<p class="info">' + data.data.length + ' quiz found !!</p><span id="info"></span>');
 					list_quiz = '<ul class="list-group">';
 					$.each(data.data, function (number, object_quiz) {
 						$.each(object_quiz, function (id, quiz_name) {
-							list_quiz = list_quiz + '<li class="list-group-item list_quiz" id="' + id + '"><span class="list_quiz_name">' + quiz_name + '</span><span class="list_quiz_img"><img class="img-thumbnail img-circle modify" src="' + module_path + 'views/img/modify.png" alt="modify quiz" /><img class="img-thumbnail img-circle delete" src="' + module_path + 'views/img/delete.png" alt="delete quiz" /><img class="img-thumbnail img-circle go" src="' + module_path + 'views/img/go.png" alt="go quiz" /></span></li>';
+							list_quiz = list_quiz + '<li class="list-group-item list_quiz" id="' + id + '"><span class="list_quiz_name">' + quiz_name + '</span><span class="quiz_activate_id" id="activate_quiz_id_' + id + '"></span><span class="list_quiz_img"><img class="img-thumbnail img-circle modify" src="' + module_path + 'views/img/modify.png" alt="modify quiz" /><img class="img-thumbnail img-circle delete" src="' + module_path + 'views/img/delete.png" alt="delete quiz" /><img class="img-thumbnail img-circle go" src="' + module_path + 'views/img/go.png" alt="go quiz" id="go_quiz_' + id + '" /></span></li>';
 						});
 					});
 					list_quiz = list_quiz + '</ul>';
@@ -79,6 +97,34 @@ $(document).ready(function () {
 				}
 			}
 		}
+	});
+	check_activate_quiz();
+	$(document.body).on('click', '.go', function () {
+		$.post(module_path + 'ajax_quiz.php', {action: 'change_quiz_activate', id_quiz: $(this).attr('id').substr(8)}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				if (data.error === null) {
+					$('#info').html('<p class="success">Quiz activate successfully !!</p>');
+					check_activate_quiz();
+				} else {
+					$('#info').html('<p class="error">Can\'t activate quiz !!</p>');
+				}
+			}
+		});
+	});
+	$(document.body).on('click', '#button_disable_quiz', function () {
+		$.post(module_path + 'ajax_quiz.php', {action: 'change_quiz_activate', id_quiz: 0}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				console.log(data);
+				if (data.error === null) {
+					$('#info').html('<p class="success">Quiz disabled successfully !!</p>');
+					check_activate_quiz();
+				} else {
+					$('#info').html('<p class="error">Can\'t disabled quiz !!</p>');
+				}
+			}
+		});
 	});
 	$(document.body).on('click', '#create_quiz_button', function () {
 		quiz_name_number_question = '';
@@ -250,4 +296,4 @@ $(document).ready(function () {
 			}
 		});
 	});
-});    
+});
