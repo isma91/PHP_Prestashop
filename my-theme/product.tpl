@@ -66,7 +66,7 @@
 		</div> <!-- end pb-left-column -->
 		<!-- end left infos-->
 		<!-- center infos -->
-		<div class="product col-xs-12 col-sm-4">
+		<div class="product col-xs-12 col-sm-4" id="product_u">
 			{if isset($images) && count($images) > 0}
 				<!-- thumbnails -->
 				<div id="views_block" class="clearfix {if isset($images) && count($images) < 2}hidden{/if}">
@@ -190,6 +190,7 @@
 					{/if}-->
 				</div> <!-- end short_description_block -->
 			{/if}
+			
 			{if ($display_qties == 1 && !$PS_CATALOG_MODE && $PS_STOCK_MANAGEMENT && $product->available_for_order)}
 				<!-- number of item in stock -->
 				<p id="pQuantityAvailable"{if $product->quantity <= 0} style="display: none;"{/if}>
@@ -228,7 +229,9 @@
 				</ul>
 			{/if}
 		</div>
-		
+			<div class="right-bar">
+			{if isset($HOOK_TOP)}{$HOOK_TOP}{/if}
+		</div>
 		<!-- end center infos-->
 		<!-- pb-right-column-->
 		<div class="pb-right-column col-xs-12 col-sm-4 col-md-3">

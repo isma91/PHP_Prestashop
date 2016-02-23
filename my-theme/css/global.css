@@ -83,18 +83,32 @@ body {
     float: left;
 }*/
 
+
+/* ---- product ---- */
+#product_u {
+    width: 70%;
+    float: left;
+}
 #views_block {
     float: left;
-    width: 10%;
+    width: 100px;
+}
+#thumbs_list_frame {
+    padding: 0;
 }
 #thumbs_list {
     float: left;
 }
+#thumbs_list li {
+    display: block;
+}
 #view_full_size {
     float: left;
 }
+
 #image-block {
     float: left;
+    margin-right: 25px;
 }
 
 .test {
