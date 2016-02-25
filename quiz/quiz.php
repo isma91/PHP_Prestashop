@@ -113,12 +113,4 @@ class Quiz extends Module
 			return $html;
 		}
 	}
-	/*
-	displayHeader	Called within the HTML <head> tags. Ideal location for adding JavaScript and CSS files.
-	displayTop	Called in the page's header.
-	displayLeftColumn	Called when loading the left column.
-	displayRightColumn	Called when loading the right column.
-	displayFooter	Called in the page's footer.
-	displayHome	Called at the center of the homepage.
-	*/
 }
