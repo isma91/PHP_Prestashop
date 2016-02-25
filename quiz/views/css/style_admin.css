@@ -50,18 +50,19 @@
 #list_image,
 #list_question_response_score_product,
 #div_validate_end_quiz,
-#info {
+#info,
+.list_history {
 	width: 90%;
 	text-align: center;
 	margin: auto;
 }
-.modify,
+.display,
 .delete,
 .go {
 	width: 10%;
 	cursor: pointer;
 }
-.modify:hover,
+.display:hover,
 .delete:hover,
 .go:hover,
 #create_quiz_button:hover,
@@ -80,7 +81,13 @@
 #list_image img {
 	width: 35%;
 }
-.question {
+.list_history_img a img {
+	width: 15%;
+}
+.question,
+#quiz_name,
+.user,
+.score {
 	font-style: bold;
 	font-size: 1.3em;
 }
@@ -94,4 +101,11 @@
 .success {
 	font-size: 1.5em;
 	color: green;
+}
+.question_response {
+	font-size: 1.3em;
+	font-weight: bold;
+}
+.response_question {
+	font-size: 1.5em;
 }
