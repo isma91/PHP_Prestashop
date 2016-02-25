@@ -48,12 +48,12 @@ class Quiz extends Module
 	public function install()
 	{
 		if (parent::install() && $this->registerHook('displayBackOfficeHeader') && $this->registerHook('displayTop')){
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `quiz_name` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_question` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `question` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_response` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `response` TEXT NOT NULL, `id_question` INT(11) NOT NULL, `score` INT(11) NOT NULL DEFAULT "0") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_list_score_product` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_list_product` TEXT NOT NULL, `score_between` TEXT NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_activate` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
-			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_history` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_user` INT(11) NOT NULL, `list_question_response` TEXT NOT NULL, `score` INT(11) NOT NULL)ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `quiz_name` TEXT NOT NULL);');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_question` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `question` TEXT NOT NULL);');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_response` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `response` TEXT NOT NULL, `id_question` INT(11) NOT NULL, `score` INT(11) NOT NULL DEFAULT "0");');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_list_score_product` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_list_product` TEXT NOT NULL, `score_between` TEXT NOT NULL);');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_activate` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL);');
+			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_history` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `id_user` INT(11) NOT NULL, `list_question_response` TEXT NOT NULL, `score` INT(11) NOT NULL);');
 			Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'quiz_activate`(`id`, `id_quiz`) VALUES (1,0)');
 			return true;
 		}
@@ -82,7 +82,7 @@ class Quiz extends Module
 		$html = $html . '<div class="jumbotron" id="div_title">';
 		$html = $html . '<h1>Welcome to Quiz module !!</h1>';
 		$html = $html . '<h2>Create a survey for you customers to display the better products !!</h2></div>';
-		$html = $html . '<p id="module_path">' . $this->_path . '</p><p id="id_language">' . $this->context->language->id . '</p>';
+		$html = $html . '<div id="list_quiz"></div><p id="module_path">' . $this->_path . '</p><p id="id_language">' . $this->context->language->id . '</p>';
 		$html = $html . '</div>';
 		return $html;
 	}
