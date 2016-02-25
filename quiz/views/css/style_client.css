@@ -127,3 +127,10 @@
 .img_link {
   cursor: pointer;
 }
+.question_response {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.response_question {
+  font-size: 1.5em;
+}
