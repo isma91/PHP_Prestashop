@@ -2,7 +2,7 @@
 /*jslint devel : true*/
 /*global $, document, this*/
 $(document).ready(function () {
-	var id_quiz, user_id, user_firstname, user_lastname, module_path, list_question, list_response, object_question_response, compteur_question, current_question_id, obj_question_response, id_question, id_response, score_response, list_image;
+	var id_quiz, user_id, user_firstname, user_lastname, module_path, list_question, list_response, object_question_response, compteur_question, current_question_id, obj_question_response, id_question, id_response, score_response, list_question_response_image;
 	compteur_question = 0;
 	object_question_response = {};
 	obj_question_response = {};
@@ -20,7 +20,6 @@ $(document).ready(function () {
 			$.post(module_path + 'ajax_quiz.php', {action: 'get_quiz_user_history', id_quiz: id_quiz, id_user: user_id}, function (data, textStatus) {
 				if (textStatus === "success") {
 					data = JSON.parse(data);
-					console.log(data);
 					if (data.error === null) {
 						if (data.data === null) {
 							$.post(module_path + 'ajax_quiz.php', {action: 'get_quiz_all_question_response', id_quiz : id_quiz}, function (data, textStatus) {
@@ -92,12 +91,17 @@ $(document).ready(function () {
 								}
 							});
 						} else {
-							list_image = '';
-							/*$.each(data.data, function (product_path, img_path) {
-								list_image = list_image + '<a href="' + product_path + '" ><img src="' + img_path + '" class="img-circle img-thumbnail"  /></a>';
+							list_question_response_image = '';
+							$.each(data.data.question_response, function(question, response) {
+								list_question_response_image = list_question_response_image + '<p><span class="question_response">Question : </span><span class="response_question">' + question + '</span></p>';
+								list_question_response_image = list_question_response_image + '<p><span class="question_response">Response : </span><span class="response_question">' + response + '</span></p>';
 							});
-							$('#quiz_score').html('<p class="info">We propose you this list of product !!</p><div id="list_image">' + list_image + '</div>');
-						*/}
+							list_question_response_image = list_question_response_image + '<p class="info">We propose you this list of product !!</p>';
+							$.each(data.data.image, function (product_path, img_path) {
+								list_question_response_image = list_question_response_image + '<a href="' + product_path + '" ><img src="' + img_path + '" class="img-circle img-thumbnail"  /></a>';
+							});
+							$('#quiz_score').html('<div id="list_image">' + list_question_response_image + '</div>');
+						}
 					}
 				}
 			});
