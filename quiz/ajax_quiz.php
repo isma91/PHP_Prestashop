@@ -236,10 +236,23 @@ function quiz_history ($id_quiz, $id_user, $score, $array_question_response, $li
 }
 function get_quiz_user_history ($id_quiz, $id_user) {
 	if (!empty($id_quiz) && !empty($id_user)) {
+		$array_question_response = array();
+		$tab_list_question_response = array();
 		$results_user_quiz = Db::getInstance()->ExecuteS('SELECT list_question_response, list_product FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id_user = "' . $id_user . '" AND id_quiz = "' . $id_quiz . '"');
 		if (count($results_user_quiz) === 1) {
 			$array_list_id_product = explode("|", $results_user_quiz[0]["list_product"]);
+			$array_list_question_response = explode("|", $results_user_quiz[0]["list_question_response"]);
 			$linkCore = new Link();
+			foreach ($array_list_question_response as $question_response) {
+				$array_question_response[] = explode(',', $question_response);
+			}
+			foreach ($array_question_response as $tab_question_response) {
+				if (count($tab_question_response) === 2) {
+					$results_question = Db::getInstance()->ExecuteS('SELECT question FROM ' . _DB_PREFIX_ . 'quiz_question WHERE id = "' . $tab_question_response[0] . '"');
+					$results_response = Db::getInstance()->ExecuteS('SELECT response FROM ' . _DB_PREFIX_ . 'quiz_response WHERE id = "' . $tab_question_response[1] . '"');
+					$tab_list_question_response[$results_question[0]["question"]] = $results_response[0]["response"];
+				}
+			}
 			foreach ($array_list_id_product as $id_product) {
 				$current_product = new Product($id_product);
 				$id_image = Product::getCover($id_product);
@@ -249,7 +262,7 @@ function get_quiz_user_history ($id_quiz, $id_user) {
 				}
 				$array_list_product_image[$linkCore->getProductLink($id_product)] = $image_url;
 			}
-			send_json(null, $array_list_product_image);
+			send_json(null, array("question_response" => $tab_list_question_response, "image" => $array_list_product_image));
 		} else {
 			send_json(null, null);
 		}
@@ -302,6 +315,59 @@ function delete_quiz ($id_quiz) {
 		send_json(null, null);
 	}
 }
+function get_quiz_history ($id_quiz) {
+	if (!empty($id_quiz)) {
+		$results_history_quiz = Db::getInstance()->ExecuteS('SELECT id_user, score, list_question_response, list_product FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id_quiz = "' . $id_quiz . '"');
+		$results_quiz_name = Db::getInstance()->ExecuteS('SELECT quiz_name FROM ' . _DB_PREFIX_ . 'quiz WHERE id = "' . $id_quiz . '"');
+		if (count($results_history_quiz) > 0) {
+			$array_list_history = array();
+			$array_tmp_list_product = array();
+			$array_tmp_list_question_response = array();
+			$array_tmp_list_question_response_final = array();
+			$linkCore = new Link();
+			foreach ($results_history_quiz as $row) {
+				$array_tmp_list_product[$row["id_user"]] = explode("|", $row["list_product"]);
+			}
+			foreach ($results_history_quiz as $row) {
+				$array_tmp_list_question_response[$row["id_user"]] = explode("|", $row["list_question_response"]);
+			}
+			foreach ($array_tmp_list_question_response as $id_user => $array_question_response) {
+				foreach ($array_question_response as $question_response) {
+					$array_tmp_list_question_response_final[$id_user][] = explode(",", $question_response);
+				}
+			}
+			foreach ($array_tmp_list_question_response_final as $id_user => $not_array_question_response) {
+				foreach ($not_array_question_response as $array_question_response) {
+					if (count($array_question_response) === 2) {
+						$results_question = Db::getInstance()->ExecuteS('SELECT question FROM ' . _DB_PREFIX_ . 'quiz_question WHERE id = "' . $array_question_response[0] . '"');
+						$results_response = Db::getInstance()->ExecuteS('SELECT response FROM ' . _DB_PREFIX_ . 'quiz_response WHERE id = "' . $array_question_response[1] . '"');
+						$array_list_history[$id_user]["question_response"][$results_question[0]["question"]] = $results_response[0]["response"];
+					}
+				}
+			}
+			foreach ($results_history_quiz as $row) {
+				$customer = new Customer((int)$row["id_user"]);
+				$array_list_history[$row["id_user"]]["score"] = $row["score"];
+				$array_list_history[$row["id_user"]]["user_lastname"] = $customer->lastname;
+				$array_list_history[$row["id_user"]]["user_firstname"] = $customer->firstname;
+			}
+			foreach ($array_tmp_list_product as $id_user => $array_id_product) {
+				foreach ($array_id_product as $id_product) {
+					$current_product = new Product($id_product);
+					$id_image = Product::getCover($id_product);
+					if (sizeof($id_image) > 0) {
+						$image = new Image($id_image['id_image']);
+						$image_url = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . ".jpg";
+					}
+					$array_list_history[$id_user]["list_product"][$linkCore->getProductLink($id_product)] = $image_url;
+				}
+			}
+			send_json(null, array("quiz_history" => $array_list_history, "quiz_name" => $results_quiz_name[0]["quiz_name"]));
+		} else {
+			send_json(null, array("quiz_history" => "empty", "quiz_name" => $results_quiz_name[0]["quiz_name"]));
+		}
+	}
+}
 switch ($_POST["action"]) {
 	case 'get_all_quiz':
 	get_all_quiz();
@@ -344,6 +410,9 @@ switch ($_POST["action"]) {
 	break;
 	case 'delete_quiz':
 	delete_quiz($_POST["id_quiz"]);
+	break;
+	case 'get_quiz_history':
+	get_quiz_history($_POST["id_quiz"]);
 	break;
 	default:
 	break;
