@@ -88,7 +88,7 @@ $(document).ready(function () {
 						list_quiz = '<ul class="list-group">';
 						$.each(data.data, function (number, object_quiz) {
 							$.each(object_quiz, function (id, quiz_name) {
-								list_quiz = list_quiz + '<li class="list-group-item list_quiz" id="' + id + '"><span class="list_quiz_name">' + quiz_name + '</span><span class="quiz_activate_id" id="activate_quiz_id_' + id + '"></span><span class="list_quiz_img"><img class="img-thumbnail img-circle modify" src="' + module_path + 'views/img/modify.png" alt="modify quiz" /><img class="img-thumbnail img-circle delete" src="' + module_path + 'views/img/delete.png" alt="delete quiz" id="delete_quiz_id_' + id + '" /><img class="img-thumbnail img-circle go" src="' + module_path + 'views/img/go.png" alt="go quiz" id="go_quiz_' + id + '" /></span></li>';
+								list_quiz = list_quiz + '<li class="list-group-item list_quiz" id="' + id + '"><span class="list_quiz_name">' + quiz_name + '</span><span class="quiz_activate_id" id="activate_quiz_id_' + id + '"></span><span class="list_quiz_img"><img class="img-thumbnail img-circle display" src="' + module_path + 'views/img/display.png" id="display_quiz_id_' + id + '" alt="display quiz" /><img class="img-thumbnail img-circle delete" src="' + module_path + 'views/img/delete.png" alt="delete quiz" id="delete_quiz_id_' + id + '" /><img class="img-thumbnail img-circle go" src="' + module_path + 'views/img/go.png" alt="go quiz" id="go_quiz_' + id + '" /></span></li>';
 							});
 						});
 						list_quiz = list_quiz + '</ul>';
@@ -119,7 +119,6 @@ $(document).ready(function () {
 			if (textStatus === "success") {
 				data = JSON.parse(data);
 				if (data.error === null) {
-					console.log(data);
 					$('#info').html('<p class="success">Quiz deleted successfully !!</p>');
 					get_all_quiz();
 					check_activate_quiz();
@@ -128,6 +127,49 @@ $(document).ready(function () {
 				}
 			}
 
+		});
+	});
+	$(document.body).on('click', '.display', function () {
+		$.post(module_path + 'ajax_quiz.php', {action: 'get_quiz_history', id_quiz: $(this).attr('id').substr(16)}, function (data, textStatus) {
+			if (textStatus === "success") {
+				data = JSON.parse(data);
+				if (data.error === null) {
+					$('.list_group')
+					$('#div_title').html('<h1>Here are the history of the quiz <span id="quiz_name">' + data.data.quiz_name + '</span></h1>');
+					list_quiz = '';
+					list_image = '';
+					list_question_response = '';
+					$.each(data.data.quiz_history, function (id_user, array_history) {
+						$.each(array_history, function (key, value) {
+							if (key === "list_product") {
+								list_image = '';
+								$.each(value, function (product_path, img_path) {
+									list_image = list_image + '<a href="' + product_path + '" ><img src="' + img_path + '" class="img-circle img-thumbnail"  /></a>';
+								});
+							}
+							if (key === "question_response") {
+								list_question_response = '';
+								$.each(value, function (question, response) {
+									list_question_response = list_question_response + '<p><span class="question_response">Question : </span><span class="response_question">' + question + '</span></p>';
+									list_question_response = list_question_response + '<p><span class="question_response">Response : </span><span class="response_question">' + response + '</span></p>';
+								});
+							}
+							if (key === "user_lastname") {
+								user_lastname = value;
+							}
+							if (key === "user_firstname") {
+								user_firstname = value;
+							}
+							if (key === "score") {
+								score = value;
+							}
+						});
+						list_quiz = list_quiz + '<div class="list_history"><h2>Quiz completed by <span class="user">' + user_firstname + ' ' + user_lastname + '</span> with a score of <span class="score">' + score + '</span></h2><div class="list_history_img">' + list_image + '</div><div class="list_history_question_response">' + list_question_response + '</div></div>';
+					});
+					$('#list_quiz').html(list_quiz);
+					console.log(data);
+				}
+			}
 		});
 	});
 	$(document.body).on('click', '#button_disable_quiz', function () {
@@ -307,7 +349,6 @@ $(document).ready(function () {
 		$.post(module_path + 'ajax_quiz.php', {action: 'create_end_quiz', quiz: obj_end_quiz, id_quiz: $('#id_quiz').text()}, function (data, textStatus) {
 			if (textStatus === "success") {
 				data = JSON.parse(data);
-				console.log(data);
 				if (data.error === null) {
 					$('#the_body').html('<div class="container" id="div_final">Your quiz have been created !! You can quit the quiz config now !!</div>');
 				}
