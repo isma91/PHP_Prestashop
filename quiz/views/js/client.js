@@ -20,6 +20,7 @@ $(document).ready(function () {
 			$.post(module_path + 'ajax_quiz.php', {action: 'get_quiz_user_history', id_quiz: id_quiz, id_user: user_id}, function (data, textStatus) {
 				if (textStatus === "success") {
 					data = JSON.parse(data);
+					console.log(data);
 					if (data.error === null) {
 						if (data.data === null) {
 							$.post(module_path + 'ajax_quiz.php', {action: 'get_quiz_all_question_response', id_quiz : id_quiz}, function (data, textStatus) {
@@ -92,11 +93,11 @@ $(document).ready(function () {
 							});
 						} else {
 							list_image = '';
-							$.each(data.data, function (product_path, img_path) {
+							/*$.each(data.data, function (product_path, img_path) {
 								list_image = list_image + '<a href="' + product_path + '" ><img src="' + img_path + '" class="img-circle img-thumbnail"  /></a>';
 							});
 							$('#quiz_score').html('<p class="info">We propose you this list of product !!</p><div id="list_image">' + list_image + '</div>');
-						}
+						*/}
 					}
 				}
 			});
