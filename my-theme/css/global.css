@@ -121,7 +121,7 @@ body {
 }
 
 #order_step {
-    padding-bottom: 20px;
+    padding-bottom: 30px;
 }
 
 #order_step .step_current {
@@ -129,15 +129,32 @@ body {
     display: block;
     width: 150px;
     background-color: blue;
-    padding: 3px;
+    padding: 5px;
     border: 1px solid black;
     color: white;
+    font-size: 1.3em;
 }
 #order_step .step_todo, #order_step .step_done_last {
+    font-size: 1.3em;
     float: left;
     display: block;
     width: 150px;
     background-color: #eee;
-    padding: 3px;
+    padding: 5px;
     border: 1px solid black;
+}
+
+
+/* shopping cart */
+.old-price {
+    text-decoration: line-through;
+}
+.special-price {
+    font-weight: bold;
+}
+
+.ajax_block_product {
+    width: 260px;
+    float: left;
+    height: 600px;
 }
