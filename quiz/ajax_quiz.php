@@ -236,7 +236,7 @@ function quiz_history ($id_quiz, $id_user, $score, $array_question_response, $li
 }
 function get_quiz_user_history ($id_quiz, $id_user) {
 	if (!empty($id_quiz) && !empty($id_user)) {
-		$results_user_quiz = Db::getInstance()->ExecuteS('SELECT list_product FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id_user = "' . $id_user . '" AND id_quiz = "' . $id_quiz . '"');
+		$results_user_quiz = Db::getInstance()->ExecuteS('SELECT list_question_response, list_product FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id_user = "' . $id_user . '" AND id_quiz = "' . $id_quiz . '"');
 		if (count($results_user_quiz) === 1) {
 			$array_list_id_product = explode("|", $results_user_quiz[0]["list_product"]);
 			$linkCore = new Link();
@@ -253,6 +253,53 @@ function get_quiz_user_history ($id_quiz, $id_user) {
 		} else {
 			send_json(null, null);
 		}
+	}
+}
+function delete_quiz ($id_quiz) {
+	if (!empty($id_quiz)) {
+		$array_question = array();
+		$array_response = array();
+		$array_list_product = array();
+		$array_history = array();
+		$results_question = Db::getInstance()->ExecuteS('SELECT id FROM ' . _DB_PREFIX_ . 'quiz_question WHERE id_quiz = "' . $id_quiz . '"');
+		foreach ($results_question as $row) {
+			array_push($array_question, $row["id"]);
+		}
+		foreach ($array_question as $id_question) {
+			$results_response = Db::getInstance()->ExecuteS('SELECT id FROM ' . _DB_PREFIX_ . 'quiz_response WHERE id_question = "' . $id_question . '"');
+			foreach ($results_response as $row) {
+				array_push($array_response, $row["id"]);
+			}
+		}
+		$results_list_product = Db::getInstance()->ExecuteS('SELECT id FROM ' . _DB_PREFIX_ . 'quiz_list_score_product WHERE id_quiz = "' . $id_quiz . '"');
+		foreach ($results_list_product as $row) {
+			array_push($array_list_product, $row["id"]);
+		}
+		$results_history = Db::getInstance()->ExecuteS('SELECT id FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id_quiz = "' . $id_quiz . '"');
+		foreach ($results_history as $row) {
+			array_push($array_history, $row["id"]);
+		}
+		$results_quiz_activate = Db::getInstance()->ExecuteS('SELECT id_quiz FROM ' . _DB_PREFIX_ . 'quiz_activate');
+		if ($results_quiz_activate[0]["id_quiz"] === $id_quiz) {
+			Db::getInstance()->ExecuteS('UPDATE ' . _DB_PREFIX_ . 'quiz_activate SET id_quiz = "0"');
+			$no_quiz_activate = true;
+		} else {
+			$no_quiz_activate = false;
+		}
+		foreach ($array_question as $id_question) {
+			Db::getInstance()->ExecuteS('DELETE  FROM ' . _DB_PREFIX_ . 'quiz_question WHERE id = "' . $id_question . '"');
+		}
+		foreach ($array_response as $id_response) {
+			Db::getInstance()->ExecuteS('DELETE  FROM ' . _DB_PREFIX_ . 'quiz_response WHERE id = "' . $id_response . '"');
+		}
+		foreach ($array_list_product as $id_list_product) {
+			Db::getInstance()->ExecuteS('DELETE  FROM ' . _DB_PREFIX_ . 'quiz_list_score_product WHERE id = "' . $id_list_product . '"');
+		}
+		foreach ($array_history as $id_history) {
+			Db::getInstance()->ExecuteS('DELETE  FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id = "' . $id_history . '"');
+		}
+		Db::getInstance()->ExecuteS('DELETE  FROM ' . _DB_PREFIX_ . 'quiz WHERE id = "' . $id_quiz . '"');
+		send_json(null, null);
 	}
 }
 switch ($_POST["action"]) {
@@ -294,6 +341,9 @@ switch ($_POST["action"]) {
 	break;
 	case 'get_quiz_user_history':
 	get_quiz_user_history($_POST["id_quiz"], $_POST["id_user"]);
+	break;
+	case 'delete_quiz':
+	delete_quiz($_POST["id_quiz"]);
 	break;
 	default:
 	break;
