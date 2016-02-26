@@ -89,6 +89,9 @@
 						</div>
 					</div>
 					<div class="log">
+							{if $logged}
+							<a href="{$base_dir}index.php?mylogout"><p>Se deconnecter</p></a>
+							{/if}
 						<a href="./connexion">
 							{if $logged}
 							<p>Mon compte</p>
