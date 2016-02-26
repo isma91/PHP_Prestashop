@@ -239,7 +239,7 @@ function get_quiz_user_history ($id_quiz, $id_user) {
 		$array_question_response = array();
 		$tab_list_question_response = array();
 		$results_user_quiz = Db::getInstance()->ExecuteS('SELECT list_question_response, list_product FROM ' . _DB_PREFIX_ . 'quiz_history WHERE id_user = "' . $id_user . '" AND id_quiz = "' . $id_quiz . '"');
-		if (count($results_user_quiz) === 1) {
+		if ($results_user_quiz === true) {
 			$array_list_id_product = explode("|", $results_user_quiz[0]["list_product"]);
 			$array_list_question_response = explode("|", $results_user_quiz[0]["list_question_response"]);
 			$linkCore = new Link();
