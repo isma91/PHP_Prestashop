@@ -85,10 +85,17 @@
 								</div>
 								
 							</div>
+
 						</div>
 					</div>
 					<div class="log">
-						<p>Login</p>
+						<a href="./connexion">
+							{if $logged}
+							<p>Mon compte</p>
+							{else}
+							<p>Connexion/Inscription</p>
+							{/if}
+						</a>
 					</div>
 					<div class="bar_top">
 						

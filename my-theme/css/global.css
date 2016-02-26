@@ -134,7 +134,7 @@ body {
     color: white;
     font-size: 1.3em;
 }
-#order_step .step_todo, #order_step .step_done_last {
+#order_step .step_todo, #order_step .step_done {
     font-size: 1.3em;
     float: left;
     display: block;
