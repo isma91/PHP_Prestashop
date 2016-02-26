@@ -47,7 +47,7 @@ class Quiz extends Module
 	}
 	public function install()
 	{
-		if (parent::install() && $this->registerHook('displayBackOfficeHeader') && $this->registerHook('displayTop')){
+		if (parent::install() && $this->registerHook('displayBackOfficeHeader') && $this->registerHook('displayTop') && $this->registerHook('displayHeader')){
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `quiz_name` TEXT NOT NULL);');
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_question` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `id_quiz` INT(11) NOT NULL, `question` TEXT NOT NULL);');
 			Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'quiz_response` (`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `response` TEXT NOT NULL, `id_question` INT(11) NOT NULL, `score` INT(11) NOT NULL DEFAULT "0");');
@@ -69,6 +69,7 @@ class Quiz extends Module
 			Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'quiz_activate`');
 			$this->unregisterHook('displayBackOfficeHeader');
 			$this->unregisterHook('displayTop');
+			$this->unregisterHook('displayHeader');
 			return true;
 		}
 		return false;
